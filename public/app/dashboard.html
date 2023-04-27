@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body onload="main()">
+    <script src="./js/uxUtils.js"></script>
+    <script src="./js/requestUtils.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/personagens.js"></script>
+    <script src="./js/ideias.js"></script>
+    <script src="./js/cobrancas.js"></script>
+    <script src="./js/missoes.js"></script>
+    <script>
+
+        function onPersonagemChange(personagem){
+            renderPersonagem(personagem);
+        }
+        function onIdeiasChange(ideias){
+            renderIdeias(ideias);
+        }
+        function onCobrancasChange(ideias){
+            renderCobrancas(ideias);
+        }
+        function onMissoesChange(missoes){
+            renderMissoes(missoes);
+        }
+
+
+        function renderPersonagem(p) {
+            showPersonagem = '';
+            showPersonagem += `<div class='itemBox'>
+                <h3>${p.nome}</h3>
+                Nível ${p.nivel} Exp: ${p.exp} Ouro: ${p.ouro}<br>
+                Historia: ${p.historia}<br>
+                Objetivos: ${p.objetivos}<br>
+            </div>`;
+            document.getElementById('showPersonagem').innerHTML = showPersonagem;
+        }
+        function renderIdeias(ideias) {
+            showIdeias = '';
+            ideias.forEach(i => {
+                showIdeias += `<div class='itemBox'>
+                    <h3>${i.titulo}</h3>
+                    ${i.texto}
+                </div>`;
+            });
+            document.getElementById('showIdeias').innerHTML = showIdeias;
+        }
+        function renderCobrancas(cobrancas) {
+            showCobrancas = '';
+            cobrancas.forEach(c => {
+                showCobrancas += `<div class='itemBox'>
+                    <h3>${c.titulo}</h3>
+                    ${c.texto}
+                </div>`;
+            });
+            document.getElementById('showCobrancas').innerHTML = showCobrancas;
+        }
+        function renderMissoes(missoes) {
+            showMissoes = '';
+            missoes.forEach(m => {
+                showMissoes += `<div class='itemBox'>
+                    <h3>${m.titulo}</h3>
+                    ${m.descricao}
+                </div>`;
+            });
+            document.getElementById('showMissoes').innerHTML = showMissoes;
+        }
+
+        function criarNovaideia () {
+            const ideia = {
+                'titulo': document.getElementById('ideia-form-titulo').value,
+                'texto': document.getElementById('ideia-form-texto').value,
+            }
+            console.log(ideia);
+            _createIdeia(idPersonagem, ideia).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadIdeias();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            })
+        }
+
+        function criarNovaCobranca () {
+            const cobranca = {
+                'titulo': document.getElementById('cobranca-form-titulo').value,
+                'texto': document.getElementById('cobranca-form-texto').value,
+                'datadesde': document.getElementById('cobranca-form-datadesde').value,
+                'lembrete': document.getElementById('cobranca-form-lembrete').value,
+            }
+            console.log(cobranca);
+            _createCobranca(idPersonagem, cobranca).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadCobrancas();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            })
+        }
+
+        function criarNovaMissao () {
+            const missao = {
+                'titulo': document.getElementById('missao-form-titulo').value,
+                'descricao': document.getElementById('missao-form-descricao').value,
+                'tipo': document.getElementById('missao-form-tipo').value,
+            }
+            console.log(missao);
+            _createMissao(idPersonagem, missao).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadMissoes();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            })
+        }
+
+        function reloadPersonagem() {
+            _toggleHidden('busy-showPersonagem');
+            _loadPersonagens().then(async data => {
+                let personagens = await data.json();
+                personagem = personagens.filter(personagem => personagem.id == idPersonagem)[0];
+                console.log(personagem);
+                onPersonagemChange(personagem);
+                _toggleHidden('busy-showPersonagem');
+            });
+        }
+        
+        function reloadIdeias() {
+            _toggleHidden('busy-showIdeias');
+            _loadIdeias(idPersonagem).then(async data => {
+                let ideias = await data.json();
+                console.log(ideias);
+                onIdeiasChange(ideias);
+                _toggleHidden('busy-showIdeias');
+            });
+        }
+        
+        function reloadCobrancas() {
+            _toggleHidden('busy-showCobrancas');
+            _loadCobrancas(idPersonagem).then(async data => {
+                let cobrancas = await data.json();
+                console.log(cobrancas);
+                onCobrancasChange(cobrancas);
+                _toggleHidden('busy-showCobrancas');
+            });
+        }
+
+        function reloadMissoes() {
+            _toggleHidden('busy-showMissoes');
+            _loadMissoes(idPersonagem).then(async data => {
+                let missoes = await data.json();
+                console.log(missoes);
+                onMissoesChange(missoes);
+                _toggleHidden('busy-showMissoes');
+            });
+        }
+
+
+        let personagem = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const idPersonagem = urlParams.get('idPersonagem');
+
+        function main () {
+            _renderMenu(idPersonagem);
+            reloadPersonagem();
+            reloadIdeias();
+            reloadCobrancas();
+            reloadMissoes();
+        }
+    </script>
+
+    <div class="container flex-column">
+        <nav id="navMenu"></nav>
+        
+        <div class="flex-column flex-wrap sons-flex-1 alignitens-start">
+
+            <div class="marginBox min-width">
+                <h2>Personagem</h2>
+                
+                <div id="busy-showPersonagem" class="hidden inline-loader"></div>
+                <div id="showPersonagem"></div>
+            </div>
+
+
+            <div class="marginBox min-width">
+                <h2>Ideias</h2>
+
+                <div id="divFormNovaIdeia" class="formBox hidden">
+                    Criar ideia<br>
+                    <label for="ideia-form-titulo">titulo</label>
+                    <input type="text" name="ideia-form-titulo" id="ideia-form-titulo">
+                    <label for="texto">texto</label>
+                    <input type="text" name="ideia-form-texto" id="ideia-form-texto">
+                    <button onclick="criarNovaideia()" type="button">Anotar</button>
+                </div>
+
+                <button onclick="_toggleHidden('divFormNovaIdeia')" type="button">Tive uma ideia!</button>
+
+                <div id="busy-showIdeias" class="hidden inline-loader"></div>
+                <div id="showIdeias"></div>
+            </div>
+
+            <div class="marginBox min-width">
+                <h2>Cobrancas</h2>
+
+                <div id="divFormNovaCobranca" class="formBox hidden">
+                    Criar Cobrança<br>
+                    <label for="cobranca-form-titulo">titulo</label>
+                    <input type="text" name="cobranca-form-titulo" id="cobranca-form-titulo">
+                    <label for="cobranca-form-texto">texto</label>
+                    <input type="text" name="cobranca-form-texto" id="cobranca-form-texto">
+                    <label for="cobranca-form-datadesde">Desde quando?</label>
+                    <input type="date" name="cobranca-form-datadesde" id="cobranca-form-datadesde">
+                    <label for="cobranca-form-lembrete">lembrete?</label>
+                    <input type="date" name="cobranca-form-lembrete" id="cobranca-form-lembrete">
+
+                    <button onclick="criarNovaCobranca()" type="button">Anotar</button>
+                </div>
+
+                <button onclick="_toggleHidden('divFormNovaCobranca')" type="button">Lembrar de cobrar...</button>
+
+                <div id="busy-showCobrancas" class="hidden inline-loader"></div>
+                <div id="showCobrancas" ></div>
+            </div>
+
+            <div class="marginBox min-width">
+                <h2>Missoes</h2>
+
+                <div id="divFormNovaMissao" class="formBox hidden">
+                    Criar Missao<br>
+                    <label for="missao-form-titulo">titulo</label>
+                    <input type="text" name="missao-form-titulo" id="missao-form-titulo">
+                    
+                    <label for="missao-form-descricao">descricao</label>
+                    <input type="text" name="missao-form-descricao" id="missao-form-descricao">
+
+                    <label for="missao-form-tipo">tipo</label>
+                    <input type="text" name="missao-form-tipo" id="missao-form-tipo">
+
+                    <button onclick="criarNovaMissao()" type="button">Anotar</button>
+                </div>
+
+                <button onclick="_toggleHidden('divFormNovaMissao')" type="button">+ desafio</button>
+
+                <div id="busy-showMissoes" class="hidden inline-loader"></div>
+                <div id="showMissoes" ></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

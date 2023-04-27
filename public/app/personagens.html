@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+    </style>
+</head>
+<body onload="main()">
+    <script src="./js/uxUtils.js"></script>
+    <script src="./js/requestUtils.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/personagens.js"></script>
+    <script>
+
+        function onPersonagensChange(personagens){
+            renderListaPersonagens(personagens);
+        }
+
+        function reloadPersonagens() {
+            _toggleHidden('busy-listaPersonagens');
+            _loadPersonagens().then(async data => {
+                let personagens = await data.json();
+                console.log(personagens);
+                onPersonagensChange(personagens);
+                _toggleHidden('busy-listaPersonagens');
+            });
+        }
+        
+        function renderListaPersonagens(personagens) {
+            listaPersonagens = '';
+            personagens.forEach(p => {
+                listaPersonagens += `<div class="itemBox">
+                    <h3>${p.nome}</h3>
+                    Nível ${p.nivel} Exp: ${p.exp} Ouro: ${p.ouro}<br>
+                    Historia: ${p.historia}<br>
+                    Objetivos: ${p.objetivos}<br>
+                    <a class="btn" href='./dashboard.html?idPersonagem=${p.id}'>escolher</a>
+                </div>`
+            });
+            document.getElementById('listaPersonagens').innerHTML = listaPersonagens;
+        }
+
+        function criarNovoPersonagem(){
+            const nome = document.getElementById('nome').value;
+            const historia = document.getElementById('historia').value;
+            const objetivos = document.getElementById('objetivos').value;
+
+            _createPersonagem({
+                'nome': nome,
+                'historia': historia,
+                'objetivos': objetivos,
+            }).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadPersonagens();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            });
+        }
+
+        let personagens = [];
+
+        function main() {
+            _renderMenu();
+            reloadPersonagens();
+        }
+        
+    </script>
+
+    <div class="container">
+        <nav id="navMenu"></nav>
+
+        <div>
+            <h2>Personagens</h2>
+            
+            <div id="divFormNovoPersonagem" class="formBox hidden">
+                <h2>Novo Personagem</h2>
+                <label for="nome">nome</label>
+                <input type="text" name="nome" id="nome">
+                
+                <label for="historia">historia</label>
+                <input type="text" name="historia" id="historia">
+                
+                <label for="objetivos">objetivos</label>
+                <input type="text" name="objetivos" id="objetivos">
+                
+                <button onclick="criarNovoPersonagem()" type="button">Começar</button>
+            </div>
+
+            <button onclick="_toggleHidden('divFormNovoPersonagem')" type="button">Criar</button>
+            <div id="busy-listaPersonagens" class="hidden inline-loader"></div>
+            <div id="listaPersonagens" class="flex"></div>
+        </div>
+    </div>
+
+</body>
+</html>

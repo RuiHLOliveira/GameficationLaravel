@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body onload="main()">
+    <script src="./js/uxUtils.js"></script>
+    <script src="./js/requestUtils.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/personagens.js"></script>
+    <script src="./js/ideias.js"></script>
+    <script>
+
+        function onPersonagemChange(personagem){
+            renderPersonagem(personagem);
+        }
+        function onIdeiasChange(ideias){
+            renderIdeias(ideias);
+        }
+
+        function renderPersonagem(p) {
+            showPersonagem = '';
+            showPersonagem += `<div class='itemBox'>
+                <h3>${p.nome}</h3>
+                Nível ${p.nivel} Exp: ${p.exp} Ouro: ${p.ouro}<br>
+                Historia: ${p.historia}<br>
+                Objetivos: ${p.objetivos}<br>
+            </div>`;
+            document.getElementById('showPersonagem').innerHTML = showPersonagem;
+        }
+        function renderIdeias(ideias) {
+            showIdeias = '';
+            ideias.forEach(i => {
+                showIdeias += `<div class='itemBox'>
+                    <h3>${i.titulo}</h3>
+                    ${i.texto}
+                </div>`;
+            });
+            document.getElementById('showIdeias').innerHTML = showIdeias;
+        }
+
+        function criarNovaideia () {
+            const ideia = {
+                'titulo': document.getElementById('ideia-form-titulo').value,
+                'texto': document.getElementById('ideia-form-texto').value,
+            }
+            console.log(ideia);
+            _createIdeia(idPersonagem, ideia).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadIdeias();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            })
+        }
+
+        function reloadPersonagem() {
+            _toggleHidden('busy-showPersonagem');
+            _loadPersonagens().then(async data => {
+                let personagens = await data.json();
+                personagem = personagens.filter(personagem => personagem.id == idPersonagem)[0];
+                console.log(personagem);
+                onPersonagemChange(personagem);
+                _toggleHidden('busy-showPersonagem');
+            });
+        }
+        
+        function reloadIdeias() {
+            _toggleHidden('busy-showIdeias');
+            _loadIdeias(idPersonagem).then(async data => {
+                let ideias = await data.json();
+                console.log(ideias);
+                onIdeiasChange(ideias);
+                _toggleHidden('busy-showIdeias');
+            });
+        }
+
+        let personagem = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const idPersonagem = urlParams.get('idPersonagem');
+
+        function main () {
+            _renderMenu(idPersonagem);
+            reloadPersonagem();
+            reloadIdeias();
+        }
+    </script>
+
+    <div class="container flex-column">
+        <nav id="navMenu"></nav>
+        
+        <div class="flex-column flex-wrap sons-flex-1 alignitens-start">
+
+            <div class="marginBox min-width">
+                <h2>Personagem</h2>
+
+                <div id="busy-showPersonagem" class="hidden inline-loader"></div>
+                <div id="showPersonagem"></div>
+            </div>
+
+
+            <div class="marginBox min-width">
+                <h2>Ideias</h2>
+
+                <div id="divFormNovaIdeia" class="formBox hidden">
+                    Criar ideia<br>
+                    <label for="ideia-form-titulo">titulo</label>
+                    <input type="text" name="ideia-form-titulo" id="ideia-form-titulo">
+                    <label for="texto">texto</label>
+                    <input type="text" name="ideia-form-texto" id="ideia-form-texto">
+                    <button onclick="criarNovaideia()" type="button">Anotar</button>
+                </div>
+
+                <button onclick="_toggleHidden('divFormNovaIdeia')" type="button">Tive uma ideia!</button>
+
+                <div id="busy-showIdeias" class="hidden inline-loader"></div>
+                <div id="showIdeias"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

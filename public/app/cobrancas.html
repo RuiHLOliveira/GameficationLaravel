@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body onload="main()">
+    <script src="./js/uxUtils.js"></script>
+    <script src="./js/requestUtils.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/personagens.js"></script>
+    <script src="./js/ideias.js"></script>
+    <script src="./js/cobrancas.js"></script>
+    <script src="./js/missoes.js"></script>
+    <script>
+
+        function onPersonagemChange(personagem){
+            renderPersonagem(personagem);
+        }
+        function onCobrancasChange(ideias){
+            renderCobrancas(ideias);
+        }
+
+        function renderPersonagem(p) {
+            showPersonagem = '';
+            showPersonagem += `<div class='itemBox'>
+                <h3>${p.nome}</h3>
+                Nível ${p.nivel} Exp: ${p.exp} Ouro: ${p.ouro}<br>
+                Historia: ${p.historia}<br>
+                Objetivos: ${p.objetivos}<br>
+            </div>`;
+            document.getElementById('showPersonagem').innerHTML = showPersonagem;
+        }
+        function renderCobrancas(cobrancas) {
+            showCobrancas = '';
+            cobrancas.forEach(c => {
+                showCobrancas += `<div class='itemBox'>
+                    <h3>${c.titulo}</h3>
+                    ${c.texto}
+                </div>`;
+            });
+            document.getElementById('showCobrancas').innerHTML = showCobrancas;
+        }
+
+
+        function criarNovaCobranca () {
+            const cobranca = {
+                'titulo': document.getElementById('cobranca-form-titulo').value,
+                'texto': document.getElementById('cobranca-form-texto').value,
+                'datadesde': document.getElementById('cobranca-form-datadesde').value,
+                'lembrete': document.getElementById('cobranca-form-lembrete').value,
+            }
+            console.log(cobranca);
+            _createCobranca(idPersonagem, cobranca).then(async response => {
+                console.log(response);
+                if(response.ok) {
+                    let data = await response.json();
+                    console.log(data);
+                    reloadCobrancas();
+                    alert('sucesso!');
+                } else {
+                    alert('um erro ocorreu');
+                }
+            })
+        }
+
+        function reloadPersonagem() {
+            _toggleHidden('busy-showPersonagem');
+            _loadPersonagens().then(async data => {
+                let personagens = await data.json();
+                personagem = personagens.filter(personagem => personagem.id == idPersonagem)[0];
+                console.log(personagem);
+                onPersonagemChange(personagem);
+                _toggleHidden('busy-showPersonagem');
+            });
+        }
+        
+        function reloadCobrancas() {
+            _toggleHidden('busy-showCobrancas');
+            _loadCobrancas(idPersonagem).then(async data => {
+                let cobrancas = await data.json();
+                console.log(cobrancas);
+                onCobrancasChange(cobrancas);
+                _toggleHidden('busy-showCobrancas');
+            });
+        }
+
+        let personagem = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const idPersonagem = urlParams.get('idPersonagem');
+
+        function main () {
+            _renderMenu(idPersonagem);
+            reloadPersonagem();
+            reloadCobrancas();
+        }
+    </script>
+
+    <div class="container flex-column">
+        <nav id="navMenu"></nav>
+        
+        <div class="flex-column flex-wrap sons-flex-1 alignitens-start">
+
+            <div class="marginBox min-width">
+                <h2>Personagem</h2>
+
+                <div id="busy-showPersonagem" class="hidden inline-loader"></div>
+                <div id="showPersonagem"></div>
+            </div>
+
+
+            <div class="marginBox min-width">
+                <h2>Cobrancas</h2>
+
+                <div id="divFormNovaCobranca" class="formBox hidden">
+                    Criar Cobrança<br>
+                    <label for="cobranca-form-titulo">titulo</label>
+                    <input type="text" name="cobranca-form-titulo" id="cobranca-form-titulo">
+                    <label for="cobranca-form-texto">texto</label>
+                    <input type="text" name="cobranca-form-texto" id="cobranca-form-texto">
+                    <label for="cobranca-form-datadesde">Desde quando?</label>
+                    <input type="date" name="cobranca-form-datadesde" id="cobranca-form-datadesde">
+                    <label for="cobranca-form-lembrete">lembrete?</label>
+                    <input type="date" name="cobranca-form-lembrete" id="cobranca-form-lembrete">
+
+                    <button onclick="criarNovaCobranca()" type="button">Anotar</button>
+                </div>
+
+                <button onclick="_toggleHidden('divFormNovaCobranca')" type="button">Lembrar de cobrar...</button>
+
+                <div id="busy-showCobrancas" class="hidden inline-loader"></div>
+                <div id="showCobrancas" ></div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>

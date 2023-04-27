@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+@import url('./button.css');
+@import url('./shadows.css');
+@import url('./modal.css');
+@import url('./table.css');
+@import url('./form.css');
+@import url('./mainmenu.css');
+@import url('./colors.css');
+@import url('./loader.css');
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    padding: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.container {
+    max-width: 94vw;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal;
+    margin: 0px;
+    padding: 0px;
+}
+
+section {
+    min-width: fit-content;
+    border-top: 1px solid #b8b8b8;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+
+.itemBox {
+    background-color: var(--default-bg-50);
+    margin: 10px 0px;
+    padding: 20px 10px;
+    border-radius: 5px;
+}
+
+.marginBox {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    background: #e6e6e685;
+}
+
+
+.contaBox {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    text-align: center;
+}
+
+
+
+.movimento-despesa {
+    color: var(--red-bg);
+}
+
+
+
+.text-align-right {
+    text-align: right !important;
+}
+
+.hidden{
+    display: none !important;
+}
+
+
+
+.fixed {
+    position: fixed;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.min-width {
+    min-width: 400px;
+}
+
+.sons-flex-1 > * {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.justify-spacebetween {
+    justify-content: space-between;
+}
+
+.alignitens-start {
+    align-items: flex-start;
+}
+
+.alignitens-center {
+    align-items: center;
+}
+
+.flex-justify-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-lateral-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
