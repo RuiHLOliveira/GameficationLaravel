@@ -13,8 +13,9 @@ class RecursoFactory extends Factory
      */
     public function definition()
     {
+        $nome = $this->faker->name();
         return [
-            //
+            'nome' => $nome,
         ];
     }
 }

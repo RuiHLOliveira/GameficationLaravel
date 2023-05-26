@@ -55,12 +55,7 @@ class PersonagemTest extends TestCase
                 $this->assertEquals($personagemArray['nome'], $personagem->nome);
                 $this->assertEquals($personagemArray['historia'], $personagem->historia);
                 $this->assertEquals($personagemArray['objetivos'], $personagem->objetivos);
-                $this->assertEquals($personagemArray['exp'], $personagem->exp);
-                $this->assertEquals($personagemArray['exptotal'], $personagem->exptotal);
-                $this->assertEquals($personagemArray['ouro'], $personagem->ouro);
-                $this->assertEquals($personagemArray['ourototal'], $personagem->ourototal);
                 $this->assertEquals($personagemArray['nivel'], $personagem->nivel);
-                $this->assertEquals($personagemArray['prestigio'], $personagem->prestigio);
             }
         } catch (Exception $e) {
             throw $e;
@@ -95,12 +90,7 @@ class PersonagemTest extends TestCase
             $this->assertEquals($personagemResponse['nome'], $personagem->nome);
             $this->assertEquals($personagemResponse['historia'], $personagem->historia);
             $this->assertEquals($personagemResponse['objetivos'], $personagem->objetivos);
-            $this->assertEquals($personagemResponse['exp'], $personagem->exp);
-            $this->assertEquals($personagemResponse['exptotal'], $personagem->exptotal);
-            $this->assertEquals($personagemResponse['ouro'], $personagem->ouro);
-            $this->assertEquals($personagemResponse['ourototal'], $personagem->ourototal);
             $this->assertEquals($personagemResponse['nivel'], $personagem->nivel);
-            $this->assertEquals($personagemResponse['prestigio'], $personagem->prestigio);
         } catch (Exception $e) {
             throw $e;
         } finally {
@@ -138,12 +128,7 @@ class PersonagemTest extends TestCase
             $this->assertEquals($personagemResponse['nome'], $personagem->nome);
             $this->assertEquals($personagemResponse['historia'], $personagem->historia);
             $this->assertEquals($personagemResponse['objetivos'], $personagem->objetivos);
-            $this->assertEquals($personagemResponse['exp'], $personagem->exp);
-            $this->assertEquals($personagemResponse['exptotal'], $personagem->exptotal);
-            $this->assertEquals($personagemResponse['ouro'], $personagem->ouro);
-            $this->assertEquals($personagemResponse['ourototal'], $personagem->ourototal);
             $this->assertEquals($personagemResponse['nivel'], $personagem->nivel);
-            $this->assertEquals($personagemResponse['prestigio'], $personagem->prestigio);
 
         } catch (Exception $e) {
             throw $e;
@@ -178,12 +163,7 @@ class PersonagemTest extends TestCase
             $this->assertEquals($personagemResponse['nome'], $personagem->nome);
             $this->assertEquals($personagemResponse['historia'], $personagem->historia);
             $this->assertEquals($personagemResponse['objetivos'], $personagem->objetivos);
-            $this->assertEquals($personagemResponse['exp'], $personagem->exp);
-            $this->assertEquals($personagemResponse['exptotal'], $personagem->exptotal);
-            $this->assertEquals($personagemResponse['ouro'], $personagem->ouro);
-            $this->assertEquals($personagemResponse['ourototal'], $personagem->ourototal);
             $this->assertEquals($personagemResponse['nivel'], $personagem->nivel);
-            $this->assertEquals($personagemResponse['prestigio'], $personagem->prestigio);
 
         } catch (Exception $e) {
             throw $e;
@@ -219,12 +199,7 @@ class PersonagemTest extends TestCase
             $this->assertEquals($personagemResponse['nome'], $personagem->nome);
             $this->assertEquals($personagemResponse['historia'], $personagem->historia);
             $this->assertEquals($personagemResponse['objetivos'], $personagem->objetivos);
-            $this->assertEquals($personagemResponse['exp'], $personagem->getOriginal('exp'));
-            $this->assertEquals($personagemResponse['exptotal'], $personagem->exptotal);
-            $this->assertEquals($personagemResponse['ouro'], $personagem->ouro);
-            $this->assertEquals($personagemResponse['ourototal'], $personagem->ourototal);
             $this->assertEquals($personagemResponse['nivel'], $personagem->nivel);
-            $this->assertEquals($personagemResponse['prestigio'], $personagem->prestigio);
 
         } catch (Exception $e) {
             throw $e;

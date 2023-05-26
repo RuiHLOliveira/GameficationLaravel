@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Cobranca extends Model
+class Anotacao extends Model
 {
     use HasFactory;
 
-    const TABLE = 'cobrancas';
+    const TABLE = 'anotacoes';
     protected $table = self::TABLE;
 
     protected $fillable = [
-        'titulo',
         'texto',
-        'datadesde',
         'lembrete',
     ];
 

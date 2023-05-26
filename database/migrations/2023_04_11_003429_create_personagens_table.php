@@ -18,12 +18,7 @@ class CreatePersonagensTable extends Migration
             $table->string('nome');
             $table->text('historia');
             $table->text('objetivos');
-            $table->unsignedBigInteger('exp')->default(0);
-            $table->unsignedBigInteger('exptotal')->default(0);
-            $table->unsignedBigInteger('ouro')->default(0);
-            $table->unsignedBigInteger('ourototal')->default(0);
             $table->unsignedBigInteger('nivel')->default(1);
-            $table->integer('prestigio')->nullable();
             $table->timestamps();
         });
     }

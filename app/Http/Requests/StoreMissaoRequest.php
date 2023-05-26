@@ -25,10 +25,12 @@ class StoreMissaoRequest extends FormRequest
     {
         return [
             'titulo' => ['required', 'string'],
-            'descricao' => ['nullable', 'string'],
+            'historia' => ['required', 'string'],
+            'descricao' => ['required', 'string'],
             'tipo' => ['required', 'integer'],
+            'situacao' => ['required', 'integer'],
+            'dificuldade' => ['required', 'integer'],
             'prazo' => ['nullable', 'date'],
-            //'situacao' => ['required', 'integer' ],
         ];
     }
 }

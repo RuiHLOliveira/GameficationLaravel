@@ -22,12 +22,7 @@ class PersonagemFactory extends Factory
             'nome' => $nome,
             'historia' => 'Exemplo de história',
             'objetivos' => 'Exemplo de objetivos',
-            'exp' => 0,
-            'exptotal' => 0,
-            'ouro' => 0,
-            'ourototal' => 0,
             'nivel' => 1,
-            'prestigio' => null,
         ];
     }
 }

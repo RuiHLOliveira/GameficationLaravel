@@ -16,12 +16,13 @@ class CreateMissoesTable extends Migration
         Schema::create('missoes', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
+            $table->string('historia');
             $table->string('descricao');
             $table->bigInteger('tipo'); //enum
             $table->dateTime('prazo');
             $table->bigInteger('situacao'); //enum
+            $table->bigInteger('dificuldade'); //enum
             $table->unsignedBigInteger('historia_id')->nullable(true); //definir foreigh
-            $table->unsignedBigInteger('dificuldade_id')->nullable(true); //definir foreigh
             $table->unsignedBigInteger('personagem_id');
             $table->timestamps();
             // $table->foreign('historia_id')->references('id')->on('historias');

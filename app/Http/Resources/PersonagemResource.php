@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use JsonSerializable;
 
-class PersonagemResource extends JsonResource
+class PersonagemResource extends JsonResource /*implements JsonSerializable*/
 {
     /**
      * Transform the resource into an array.
@@ -18,12 +19,7 @@ class PersonagemResource extends JsonResource
             'nome' => $this->nome,
             'historia' => $this->historia,
             'objetivos' => $this->objetivos,
-            'exp' => $this->exp,
-            'exptotal' => $this->exptotal,
-            'ouro' => $this->ouro,
-            'ourototal' => $this->ourototal,
             'nivel' => $this->nivel,
-            'prestigio' => $this->prestigio,
         ];
     }
 }

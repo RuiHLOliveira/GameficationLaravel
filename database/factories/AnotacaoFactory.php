@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class IdeiaFactory extends Factory
+class AnotacaoFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -13,11 +13,11 @@ class IdeiaFactory extends Factory
      */
     public function definition()
     {
-        $titulo = $this->faker->text(50);
-        $texto = $this->faker->text(300);
+        $texto = $this->faker->text(50);
+        $lembrete = $this->faker->dateTimeBetween('now', '+1 week');
         return [
-            'titulo' => $titulo,
             'texto' => $texto,
+            'lembrete' => $lembrete,
         ];
     }
 }

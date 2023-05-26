@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreIdeiaRequest extends FormRequest
+class UpdateAnotacaoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class StoreIdeiaRequest extends FormRequest
     public function rules()
     {
         return [
-            'titulo' => ['string', 'required'],
-            'texto' => ['string', 'nullable'],
+            'texto' => ['string', 'required'],
+            'lembrete' => ['date', 'nullable'],
         ];
     }
 }

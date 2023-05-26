@@ -27,9 +27,9 @@ class PersonagemController extends Controller
      * @param  \App\Models\Personagem  $personagem
      * @return \Illuminate\Http\Response
      */
-    public function show(Personagem $personagem)
+    public function show($personagem)
     {
-        return Personagem::findOrFail($personagem->id);
+        return Personagem::findOrFail($personagem);
     }
 
     /**
@@ -54,8 +54,9 @@ class PersonagemController extends Controller
      * @param  \App\Models\Personagem  $personagem
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePersonagemRequest $request, Personagem $personagem)
+    public function update(UpdatePersonagemRequest $request, $personagem)
     {
+        $personagem = Personagem::findOrFail($personagem);
         $personagem->fill($request->safe()->all());
         $personagem->save();
 

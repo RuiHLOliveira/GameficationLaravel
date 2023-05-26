@@ -9,7 +9,8 @@ class Recurso extends Model
 {
     use HasFactory;
     
-    protected $table = 'recursos';
+    const TABLE = 'recursos';
+    protected $table = self::TABLE;
 
     protected $fillable = [
         'nome',

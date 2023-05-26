@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
+use DateTime;
 use Exception;
 use Tests\TestCase;
-use App\Models\Cobranca;
+use App\Models\Anotacao;
 use App\Models\Personagem;
-use DateTime;
 
-class CobrancaTest extends TestCase
+class AnotacaoTest extends TestCase
 {
 
-    protected $url = '/api/%s/cobrancas/%s';
+    protected $url = '/api/%s/anotacoes/%s';
 
     private function beforeTest()
     {
@@ -19,13 +19,13 @@ class CobrancaTest extends TestCase
     }
     private function afterTest()
     {
-        $this->removerCobrancas();
+        $this->removerAnotacoes();
         $this->removerPersonagens();
     }
 
-    private function removerCobrancas()
+    private function removerAnotacoes()
     {
-        Cobranca::truncate();
+        Anotacao::truncate();
     }
     private function removerPersonagens()
     {
@@ -39,24 +39,24 @@ class CobrancaTest extends TestCase
             //preparação
             $personagens = Personagem::factory()->count(3)->create();
             foreach ($personagens as $key => $personagem) {
-                $cobrancasPersonagem = Cobranca::factory()->count(3)->create(['personagem_id' => $personagem->id]);
+                $anotacoesPersonagem = Anotacao::factory()->count(3)->create(['personagem_id' => $personagem->id]);
             }
 
             //execução
             $personagemTeste = $personagens[0];
-            $cobrancasTeste = $personagemTeste->cobrancas;
+            $anotacoesTeste = $personagemTeste->anotacoes;
 
             $url = sprintf($this->url, $personagemTeste->id, '');
             $response = $this->getJson($url);
 
             //assert
             $response->assertStatus(200);
-            $response->assertJsonCount(count($cobrancasTeste));
-            $cobrancasResponse = $response->json();
-            foreach ($cobrancasResponse as $key => $cobrancaArray) {
-                $cobranca = $cobrancasTeste->find($cobrancaArray['id']);
-                $this->assertEquals($cobrancaArray['titulo'], $cobranca->titulo);
-                $this->assertEquals($cobrancaArray['texto'], $cobranca->texto);
+            $response->assertJsonCount(count($anotacoesTeste));
+            $anotacoesResponse = $response->json();
+            foreach ($anotacoesResponse as $key => $anotacaoArray) {
+                $anotacao = $anotacoesTeste->find($anotacaoArray['id']);
+                $this->assertEquals($anotacaoArray['lembrete'], $anotacao->lembrete);
+                $this->assertEquals($anotacaoArray['texto'], $anotacao->texto);
             }
         } catch (Exception $e) {
             throw $e;
@@ -73,22 +73,22 @@ class CobrancaTest extends TestCase
             //preparação
             $personagens = Personagem::factory()->count(3)->create();
             foreach ($personagens as $key => $personagem) {
-                $cobrancasPersonagem = Cobranca::factory()->count(3)->create(['personagem_id' => $personagem->id]);
+                $anotacoesPersonagem = Anotacao::factory()->count(3)->create(['personagem_id' => $personagem->id]);
             }
 
             //execução
             $personagemTeste = $personagens[0];
-            $cobrancaTeste = $personagemTeste->cobrancas;
-            $cobrancaTeste = $cobrancaTeste->first();
+            $anotacaoTeste = $personagemTeste->anotacoes;
+            $anotacaoTeste = $anotacaoTeste->first();
 
-            $url = sprintf($this->url, $personagemTeste->id, $cobrancaTeste->id);
+            $url = sprintf($this->url, $personagemTeste->id, $anotacaoTeste->id);
             $response = $this->getJson($url);
 
             //assert
             $response->assertStatus(200);
-            $cobrancaResponse = $response->json();
-            $this->assertEquals($cobrancaResponse['titulo'], $cobrancaTeste->titulo);
-            $this->assertEquals($cobrancaResponse['texto'], $cobrancaTeste->texto);
+            $anotacaoResponse = $response->json();
+            $this->assertEquals($anotacaoResponse['lembrete'], $anotacaoTeste->lembrete);
+            $this->assertEquals($anotacaoResponse['texto'], $anotacaoTeste->texto);
         } catch (Exception $e) {
             throw $e;
         } finally {
@@ -104,32 +104,29 @@ class CobrancaTest extends TestCase
             //preparação
             $personagens = Personagem::factory()->count(3)->create();
             foreach ($personagens as $key => $personagem) {
-                $cobrancasPersonagem = Cobranca::factory()->count(3)->create(['personagem_id' => $personagem->id]);
+                $anotacoesPersonagem = Anotacao::factory()->count(3)->create(['personagem_id' => $personagem->id]);
             }
 
             $requestData = [
-                'titulo' => '$personagem->titulo',
                 'texto' => '$personagem->texto',
-                'datadesde' => (new DateTime())->format('Y-m-d H:i:s'),
                 'lembrete' => (new DateTime())->format('Y-m-d H:i:s'),
             ];
             
             $personagemTeste = $personagens[0];
 
-            $url = sprintf($this->url, $personagemTeste->id, '');
+            $url = sprintf($this->url, $personagemTeste->id , '');
             $response = $this->postJson($url, $requestData);
 
             $response->assertStatus(201);
-            $cobrancaResponse = $response->json();
-            $this->assertEquals($cobrancaResponse['titulo'], $requestData['titulo']);
-            $this->assertEquals($cobrancaResponse['texto'], $requestData['texto']);
-            $this->assertEquals($cobrancaResponse['personagem_id'], $personagemTeste->id);
+            $anotacaoResponse = $response->json();
+            $this->assertEquals($anotacaoResponse['texto'], $requestData['texto']);
+            $this->assertEquals($anotacaoResponse['lembrete'], $requestData['lembrete']);
+            $this->assertEquals($anotacaoResponse['personagem_id'], $personagemTeste->id);
 
-            $this->assertDatabaseHas(cobranca::TABLE, [
-                'titulo' => $requestData['titulo'],
+            $this->assertDatabaseHas(Anotacao::TABLE, [
                 'texto' => $requestData['texto'],
                 'personagem_id' => $personagemTeste->id,
-                'id' => $cobrancaResponse['id']
+                'id' => $anotacaoResponse['id']
             ]);
 
         } catch (Exception $e) {
@@ -146,33 +143,33 @@ class CobrancaTest extends TestCase
             
             $personagens = Personagem::factory()->count(3)->create();
             foreach ($personagens as $key => $personagem) {
-                $cobrancasPersonagem = Cobranca::factory()->count(3)->create(['personagem_id' => $personagem->id]);
+                $anotacoesPersonagem = Anotacao::factory()->count(3)->create(['personagem_id' => $personagem->id]);
             }
 
             $requestData = [
-                'titulo' => 'personagem->titulo',
                 'texto' => 'personagem->texto',
+                'lembrete' => (new DateTime())->format('Y-m-d H:i:s'),
             ];
             
             $personagemTeste = $personagens[0];
-            $cobrancaTeste = $personagemTeste->cobrancas->first();
-            $cobrancaTeste->titulo .= '1';
-            $cobrancaTeste->texto .= '2';
-            $requestData = $cobrancaTeste->toArray();
+            $anotacaoTeste = $personagemTeste->anotacoes->first();
+            $anotacaoTeste->texto .= '2';
+            $requestData = $anotacaoTeste->toArray();
+            //falta o lembrete
 
-            $url = sprintf($this->url, $personagemTeste->id, $cobrancaTeste->id);
+            $url = sprintf($this->url, $personagemTeste->id, $anotacaoTeste->id);
             $response = $this->putJson($url, $requestData);
 
             $response->assertStatus(200);
-            $cobrancaResponse = $response->json();
-            $this->assertEquals($cobrancaResponse['titulo'], $requestData['titulo']);
-            $this->assertEquals($cobrancaResponse['texto'], $requestData['texto']);
-            $this->assertEquals($cobrancaResponse['personagem_id'], $personagemTeste->id);
-            $this->assertDatabaseHas(Cobranca::TABLE, [
-                'titulo' => $requestData['titulo'],
+            $anotacaoResponse = $response->json();
+            $this->assertEquals($anotacaoResponse['lembrete'], $requestData['lembrete']);
+            $this->assertEquals($anotacaoResponse['texto'], $requestData['texto']);
+            $this->assertEquals($anotacaoResponse['personagem_id'], $personagemTeste->id);
+            $this->assertDatabaseHas(Anotacao::TABLE, [
+                'lembrete' => $requestData['lembrete'],
                 'texto' => $requestData['texto'],
                 'personagem_id' => $personagemTeste->id,
-                'id' => $cobrancaTeste->id
+                'id' => $anotacaoTeste->id
             ]);
 
         } catch (Exception $e) {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateValoresBasesTable extends Migration
+class CreateAnotacoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateValoresBasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('valoresbases', function (Blueprint $table) {
+        Schema::create('anotacoes', function (Blueprint $table) {
             $table->id();
-            $table->integer('expAvancarNivel');
-            $table->integer('ouroMaximoMissao');
+            $table->datetime('lembrete');
+            $table->longText('texto');
+            $table->unsignedBigInteger('personagem_id');
+            $table->foreign('personagem_id')->references('id')->on('personagens');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateValoresBasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('valoresbases');
+        Schema::dropIfExists('anotacoes');
     }
 }

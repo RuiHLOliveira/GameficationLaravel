@@ -16,9 +16,11 @@ class MissaoFactory extends Factory
     public function definition()
     {
         $titulo = $this->faker->text(50);
+        $historia = $this->faker->text(300);
         $descricao = $this->faker->text(300);
-        $tipo = $this->faker->randomElement([Missao::TIPO_DIARIA, Missao::TIPO_SEMANAL, Missao::TIPO_UNICA]);
-        $situacao = $this->faker->randomElement([Missao::SITUACAO_ATIVA, Missao::SITUACAO_PAUSADA, Missao::SITUACAO_FALHA]);
+        $dificuldade = $this->faker->randomElement([1,2,3]);
+        $tipo = $this->faker->randomElement(Missao::getEnumTipos());
+        $situacao = $this->faker->randomElement(Missao::getEnumSituacoes());
 
         if($tipo == Missao::TIPO_DIARIA) {
             $prazo = (new DateTime())->format('Y-m-d');
@@ -28,17 +30,15 @@ class MissaoFactory extends Factory
             $prazo = (new DateTime('tomorrow'))->format('Y-m-d');
         }
 
-        // $datadesde = $this->faker->dateTime();
-        // $lembrete = $this->faker->datetime();
         return [
             'titulo' => $titulo,
+            'historia' => $historia,
             'descricao' => $descricao,
             'tipo' => $tipo,
             'prazo' => $prazo,
             'situacao' => $situacao,
+            'dificuldade' => $dificuldade,
             // 'historia_id' => null,
-            // 'dificuldade_id' => null,
-            // 'personagem_id' => $personagem_id,
         ];
     }
 }
